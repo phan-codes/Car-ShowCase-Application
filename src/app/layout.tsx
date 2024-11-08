@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { NavBar, Footer } from '@/components';
 
 export const metadata: Metadata = {
-	title: 'Car ShowCase | Get Your Nice Car In Our Collection',
-	description: 'A web app for showcasing cars and their price list',
+	title: 'Car Hub | Get Your Nice Car In Our Collection',
+	description: 'A web app for showcasing cars and their price list, discover the best cars in the world',
 };
 
 export default function RootLayout({
@@ -13,7 +14,11 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body>{children}</body>
+			<body>
+				<NavBar />
+				{children}
+				<Footer />
+			</body>
 		</html>
 	);
 }
