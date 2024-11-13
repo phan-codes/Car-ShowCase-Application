@@ -1,7 +1,17 @@
 import { Hero, SearchBar, CustomFilter, CarCard } from '@/components';
+import { HomeProps } from '@/types';
 import { fetchCars } from '@/utils';
-const HomePage = async () => {
-	const allCars = await fetchCars();
+import { yearsOfProduction, fuels } from '@/constants';
+
+const HomePage = async ({ searchParams }: HomeProps) => {
+	const { manufacturer, year, fuel, limit, model } = searchParams;
+	const allCars = await fetchCars({
+		manufacturer: manufacturer || '',
+		year: year || 2022,
+		fuel: fuel || '',
+		limit: limit || 10,
+		model: model || '',
+	});
 
 	const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
 
@@ -16,8 +26,8 @@ const HomePage = async () => {
 				<div className='home__filters'>
 					<SearchBar />
 					<div className='home__filter-container'>
-						<CustomFilter title='fuel' />
-						<CustomFilter title='year' />
+						<CustomFilter title='fuel' options={fuels} />
+						<CustomFilter title='year' options={yearsOfProduction} />
 					</div>
 				</div>
 
@@ -32,7 +42,7 @@ const HomePage = async () => {
 				) : (
 					<div className='home__error-container'>
 						<h2 className='text-black text-xl font-bold'>Oops, no results</h2>
-						<p>{allCars.messaage}</p>
+						<p>{allCars.message}</p>
 					</div>
 				)}
 			</div>

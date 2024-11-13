@@ -1,14 +1,19 @@
-import { CarProps } from '@/types';
+import { CarProps, FilterProps } from '@/types';
 
-export const fetchCars = async () => {
+export const fetchCars = async (filters: FilterProps) => {
 	const headers = {
 		'x-rapidapi-key': '76b642e8cemsha119ff94db7a890p187409jsn780b62e001c9',
 		'x-rapidapi-host': 'cars-by-api-ninjas.p.rapidapi.com',
 	};
 
-	const response = await fetch('https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=q3', {
-		headers: headers,
-	});
+	const { manufacturer, year, model, fuel, limit } = filters;
+
+	const response = await fetch(
+		`https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&limit=${limit}&fuel_type=${fuel}`,
+		{
+			headers: headers,
+		}
+	);
 
 	const result = await response.json();
 
@@ -43,4 +48,30 @@ export const generateCarImageUrl = (car: CarProps, angle?: string) => {
 	url.searchParams.append('angle', `${angle}`);
 
 	return `${url}`;
+};
+
+export const updateSearchParams = (type: string, value: string) => {
+	// Get the current URL search params
+	const searchParams = new URLSearchParams(window.location.search);
+
+	// Set the specified search parameter to the given value
+	searchParams.set(type, value);
+
+	// Set the specified search parameter to the given value
+	const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
+
+	return newPathname;
+};
+
+export const deleteSearchParams = (type: string) => {
+	// Set the specified search parameter to the given value
+	const newSearchParams = new URLSearchParams(window.location.search);
+
+	// Delete the specified search parameter
+	newSearchParams.delete(type.toLocaleLowerCase());
+
+	// Construct the updated URL pathname with the deleted search parameter
+	const newPathname = `${window.location.pathname}?${newSearchParams.toString()}`;
+
+	return newPathname;
 };
